@@ -5,33 +5,28 @@
 #                                                     +:+ +:+         +:+      #
 #    By: chajjar <chajjar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/01/26 10:14:08 by chajjar           #+#    #+#              #
-#    Updated: 2023/01/29 15:41:52 by chajjar          ###   ########.fr        #
+#    Created: 2023/01/26 10:12:47 by chajjar           #+#    #+#              #
+#    Updated: 2023/01/29 16:01:16 by chajjar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 # STEP 1: Get base image
-FROM  debian:buster
+FROM debian:buster
 
 # STEP 2: Download requiered elements
-RUN apt-get -y upgrade \
-    && apt-get -y update \
-    && apt-get install -y nginx openssl
+RUN apt-get -y upgrade && apt-get -y update \
+	&& apt-get install -y mariadb-server mariadb-client
 
 # STEP 3: Duplicate configs and utilities in container
-COPY ./conf/nginx.conf /etc/nginx/conf.d/nginx.conf
-COPY ./tools_sys/start.sh /usr/local/bin
+COPY tools_sys/start.sh /usr/local/bin
+COPY conf/requete.sql /usr/local
 
-# STEP 4: Create self-signed SSL certificates
-RUN openssl req -new -newkey rsa:2048 -nodes \
-    -keyout /etc/chajjar.42.fr.key -out /etc/chajjar.42.fr.csr \
-    -subj "/C=FR/ST=Alsace/L=Mulhouse/CN=chajjar.42.fr" \
-    \
-    && openssl x509 -req \
-    -in /etc/chajjar.42.fr.csr -signkey /etc/chajjar.42.fr.key \
-    -out /etc/chajjar.42.fr.crt
+# STEP 4: Create and setup mariadb directory
+RUN mkdir -p /run/mysqld \
+	&& chown -R mysql:mysql /run/mysqld \
+	&& chown -R mysql:mysql /var/lib/mysql
 
-# STEP 5: Run start.sh as entrypoint and expose the port
-EXPOSE 443
+# STEP 6: Run start.sh as entrypoint and expose the port
+EXPOSE 3306
 ENTRYPOINT [ "start.sh" ]

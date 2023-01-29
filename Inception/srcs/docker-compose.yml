@@ -1,16 +1,89 @@
 version: '3'
 
 services:
+
     nginx:
-        image: nginx:mine
+        image: nginx:1.10.2
         build:
           context: ./requirements/nginx/
         container_name: nginx
         networks:
-          - network
+          - internal
         ports:
           - "443:443"
         restart: always
+        depends_on:
+          - wordpress
+        volumes:
+          #- volume-wordpress:/var/www/wordpress
+          #- nginx:/var/log/nginx
+          #- logs:/var/lib/log
+          - wordpress:/var/www/html/wordpress
+
+    wordpress:
+        image: wordpress:6.1.1
+        container_name: wordpress
+        build: 
+          context: ./requirements/wordpress
+        env_file:
+          - .env
+        restart: always
+        volumes:
+          - logs:/var/log
+          - wordpress:/var/www/html/wordpress
+        networks:
+          - internal
+        depends_on:
+          - mariadb
+
+    mariadb:
+        image: mariadb:10.10.2
+        container_name: mariadb
+        build: 
+          context: ./requirements/mariadb
+        env_file:
+          - .env
+        restart: always
+        volumes:
+          - mariadb:/var/lib/mysql
+        networks:
+          - internal
+
+###  NETWORKS  ###
+# Used as connection between services
 
 networks:
-  network:
+  internal:
+
+###  VOLUMES  ###
+# Used as storage for services
+
+volumes:
+
+    mariadb:
+      driver: local
+      driver_opts:
+        type: none
+        device: /var/lib/mysql
+        o: bind
+
+    wordpress:
+      driver: local
+      driver_opts:
+        type: none
+        device: /var/www/wordpress
+        o: bind
+
+    logs:
+      driver: local
+      driver_opts:
+        type: none
+        device: /var/lib/log
+        o: bind
+
+    nginx:
+      driver: local
+      driver_opts:
+        type: none
+        device: /var/log/nginx
+        o: bind
