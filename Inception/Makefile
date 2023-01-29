@@ -32,6 +32,7 @@ fc: fclean
 fclean: clean
 	@docker rm -f $(shell docker ps -aq) $(IDC)
 	@docker rmi -f $(shell docker images -aq) $(IDC)
+	@docker volume rm $(shell docker volume ls -q) $(IDC)
 
 b: build
 build: clean
