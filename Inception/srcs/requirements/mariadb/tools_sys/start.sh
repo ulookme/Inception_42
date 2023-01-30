@@ -38,3 +38,24 @@ sed -i "s|.*bind-address\s*=.*|bind-address=0.0.0.0|g" $conf
 
 # Run MariaDB
 exec mysqld --user=mysql
+
+####Documentation francais
+#script Shell pour configurer et exécuter MariaDB (un système de gestion de base de données open-source) sur un système basé sur Unix/Linux. 
+#Il effectue les tâches suivantes:
+
+#Déclaration de variables:
+
+#file: chemin vers le fichier requete.sql qui contient des instructions SQL à exécuter
+#conf: chemin vers le fichier de configuration de MariaDB
+#env: un tableau de variables d'environnement qui seront utilisées dans le script
+#Application des variables d'environnement au fichier requete.sql à l'aide de la boucle "for" et de la commande "sed".
+
+#Installation de MariaDB à l'aide de la commande "mysql_install_db". 
+#Les informations de sortie sont redirigées pour ne pas afficher les messages d'avertissement.
+
+#Exécution des instructions SQL dans le fichier requete.sql à l'aide de la commande "mysqld --bootstrap".
+
+#Configuration de MariaDB pour écouter et répondre à toutes les interfaces réseau avec la commande "sed". 
+#Cela est nécessaire pour la structure du conteneur Docker.
+
+#Exécution de MariaDB avec la commande "exec mysqld --user=mysql".

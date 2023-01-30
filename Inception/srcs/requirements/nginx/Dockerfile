@@ -6,7 +6,7 @@
 #    By: chajjar <chajjar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 10:14:08 by chajjar           #+#    #+#              #
-#    Updated: 2023/01/29 15:41:52 by chajjar          ###   ########.fr        #
+#    Updated: 2023/01/30 09:11:04 by chajjar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,3 +35,12 @@ RUN openssl req -new -newkey rsa:2048 -nodes \
 # STEP 5: Run start.sh as entrypoint and expose the port
 EXPOSE 443
 ENTRYPOINT [ "start.sh" ]
+
+#Documentation Francais
+#Docker qui exécute un serveur Nginx. Il effectue les actions suivantes :
+
+#Il définit l'image de base à partir de laquelle sera créée la nouvelle image en utilisant l'image Debian buster.
+#Il installe Nginx et OpenSSL en utilisant apt-get.
+#Il copie les fichiers de configuration Nginx et un script de démarrage dans le conteneur.
+#Il crée des certificats SSL auto-signés.
+#Il définit le port 443 comme exposé et le script de démarrage comme point d'entrée de l'image Docker.

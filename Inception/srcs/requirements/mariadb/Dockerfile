@@ -6,7 +6,7 @@
 #    By: chajjar <chajjar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 10:12:47 by chajjar           #+#    #+#              #
-#    Updated: 2023/01/29 16:01:16 by chajjar          ###   ########.fr        #
+#    Updated: 2023/01/30 09:18:37 by chajjar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,3 +30,10 @@ RUN mkdir -p /run/mysqld \
 # STEP 6: Run start.sh as entrypoint and expose the port
 EXPOSE 3306
 ENTRYPOINT [ "start.sh" ]
+
+#Documentation des etatpes en francais
+#Sélection de l'image de base Debian Buster
+#Téléchargement des éléments requis, tels que MariaDB Server et MariaDB Client, en utilisant les commandes apt-get
+#Copie des fichiers de configuration et des outils nécessaires dans le conteneur
+#Création et configuration du répertoire MariaDB
+#Exposition du port 3306 et définition du script de démarrage comme point d'entrée de l'image Docker

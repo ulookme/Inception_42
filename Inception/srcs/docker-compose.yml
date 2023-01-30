@@ -1,3 +1,7 @@
+#Docker Compose de version 3, qui définit une configuration pour plusieurs services : Nginx, Wordpress et MariaDB.
+
+#Les services sont définis dans la section "services", chacun avec leurs propriétés :
+
 version: '3'
 
 services:
@@ -19,6 +23,15 @@ services:
           #- nginx:/var/log/nginx
           #- logs:/var/lib/log
           - wordpress:/var/www/html/wordpress
+#Nginx :
+
+#utilise l'image Nginx de version 1.10.2
+#construit à partir du context de fichier ./requirements/nginx/
+#nom du conteneur sera "nginx"
+#utilise un réseau interne nommé "internal"
+#expose le port 443 pour être accessible en externe
+#dépend de Wordpress pour être démarré
+#utilise un volume pour stocker ses données sur le chemin /var/www/html/wordpress
 
     wordpress:
         image: wordpress:6.1.1
@@ -35,6 +48,16 @@ services:
           - internal
         depends_on:
           - mariadb
+#Wordpress :
+
+#utilise l'image Wordpress de version 6.1.1
+#nom du conteneur sera "wordpress"
+#construit à partir du context de fichier ./requirements/wordpress
+#utilise les variables d'environnement définies dans le fichier .env
+#redémarre toujours en cas d'erreur
+#utilise des volumes pour stocker ses données et les journaux de log sur les chemins /var/log et /var/www/html/wordpress
+#utilise un réseau interne nommé "internal"
+#dépend de MariaDB pour être démarré
 
     mariadb:
         image: mariadb:10.10.2
@@ -49,6 +72,17 @@ services:
         networks:
           - internal
 
+#MariaDB :
+
+#utilise l'image MariaDB de version 10.10.2
+#nom du conteneur sera "mariadb"
+#construit à partir du context de fichier ./requirements/mariadb
+#utilise les variables d'environnement définies dans le fichier .env
+#redémarre toujours en cas d'erreur
+#utilise un volume pour stocker ses données sur le chemin /var/lib/mysql
+#utilise un réseau interne nommé "internal"
+#Les réseaux internes sont définis dans la section "networks", avec un réseau interne unique nommé "internal".
+
 ###  NETWORKS  ###
 # Used as connection between services
 
@@ -57,7 +91,12 @@ networks:
 
 ###  VOLUMES  ###
 # Used as storage for services
+#Les volumes sont définis dans la section "volumes", chacun avec leurs propriétés:
 
+#mariadb : utilise le conducteur local, qui est lié au chemin /var/lib/mysql sur l'hôte
+#wordpress : utilise le conducteur local, qui est lié au chemin /var/www/wordpress sur l'hôte
+#logs : utilise le conducteur local, qui est lié au chemin /var/lib/log sur l'hôte
+#nginx : utilise le conducteur local, qui est lié au chemin /var/log/nginx sur l'hôte
 volumes:
 
     mariadb:

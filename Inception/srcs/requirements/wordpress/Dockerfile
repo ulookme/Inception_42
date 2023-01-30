@@ -32,3 +32,14 @@ RUN mkdir -p /var/www/html \
 EXPOSE 9000
 WORKDIR /var/www/html/wordpress
 ENTRYPOINT [ "script.sh" ]
+
+###documentation francais
+#Ce code est un script Docker qui définit l'image d'une application web Wordpress. Il fait les étapes suivantes:
+
+#Définit l'image de base en utilisant "debian:buster"
+#Installe les packages nécessaires pour l'application (curl, mariadb-client, redis, php7.3, etc.) en utilisant la commande "apt-get"
+#Télécharge et configure "dumb-init" et "wp-cli"
+#Copie des fichiers de configuration pour PHP et FPM
+#Crée un utilisateur et un répertoire pour l'application
+#Définit les ports exposés et le répertoire de travail pour l'application
+#Définit le script d'entrée pour démarrer l'application.
